@@ -1,0 +1,77 @@
+
+// Program: Order Block Indicator MT5
+
+#property indicator_chart_window
+
+// Function to identify potential accumulation of orders in one area
+void OrderBlockIndicator()
+{
+    // Define relevant levels for price reactions
+    double wickLevel = 0.0;
+    double bodyLevel = 0.0;
+    double candle50Level = 0.0;
+    
+    // Calculate levels based on candle properties
+    if (CandleIsBullish())
+    {
+        wickLevel = High[0];
+        bodyLevel = Close[0];
+        candle50Level = (High[0] + Low[0]) / 2.0;
+    }
+    else if (CandleIsBearish())
+    {
+        wickLevel = Low[0];
+        bodyLevel = Close[0];
+        candle50Level = (High[0] + Low[0]) / 2.0;
+    }
+    
+    // Print the levels for debugging purposes
+    Print('Wick Level: ', wickLevel);
+    Print('Body Level: ', bodyLevel);
+    Print('50% Level: ', candle50Level);
+}
+
+// Function to check if the current candle is bullish
+bool CandleIsBullish()
+{
+    return (Close[0] > Open[0]);
+}
+
+// Function to check if the current candle is bearish
+bool CandleIsBearish()
+{
+    return (Close[0] < Open[0]);
+}
+
+// Initialization function
+int OnInit()
+{
+    // Set indicator properties
+    IndicatorSetString(INDICATOR_SHORTNAME, 'Order Block Indicator');
+    
+    return(INIT_SUCCEEDED);
+}
+
+// Deinitialization function
+void OnDeinit(const int reason)
+{
+    // Cleanup resources
+}
+
+// Calculation function
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const datetime& time[],
+                const double& open[],
+                const double& high[],
+                const double& low[],
+                const double& close[],
+                const long& tick_volume[],
+                const long& volume[],
+                const int& spread[])
+{
+    // Call the OrderBlockIndicator function
+    OrderBlockIndicator();
+    
+    return(rates_total);
+}
